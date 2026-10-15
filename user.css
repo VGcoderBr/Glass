@@ -1,0 +1,393 @@
+/* ==========================================================
+   Glass Clean - Ambient Glass para Spicetify v2.45.3
+   Destaque: verde Spotify | Intensidade: máxima
+   ========================================================== */
+
+:root {
+  --gc-accent: #1ed760;
+  --gc-accent-soft: rgba(30, 215, 96, 0.18);
+  --gc-accent-glow: rgba(30, 215, 96, 0.45);
+
+  /* Ajuste fino da intensidade */
+  --gc-blur: 8px;              /* desfoque do vidro (painéis) */
+  --gc-ambient-blur: 0px;      /* desfoque da capa ao fundo */
+  --gc-ambient-brightness: 0.85;
+  --gc-saturate: 190%;
+
+  --gc-glass: rgba(255, 255, 255, 0.03);
+  --gc-glass-strong: rgba(255, 255, 255, 0.04);
+  --gc-glass-hover: rgba(255, 255, 255, 0.13);
+  --gc-border: rgba(255, 255, 255, 0.12);
+  --gc-radius: 18px;
+  --gc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html { background: #050807 !important; }
+
+/* ---------- Camada ambiente (criada pelo theme.js) ---------- */
+#gc-ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 700px at 12% 8%, rgba(30, 215, 96, 0.22), transparent 60%),
+    radial-gradient(900px 600px at 95% 95%, rgba(30, 215, 96, 0.14), transparent 60%),
+    #050807;
+}
+.gc-ambient-img {
+  position: absolute;
+  inset: 0%;
+  background-size: contain;
+  background-position: center;
+  filter: blur(var(--gc-ambient-blur)) saturate(2.2) brightness(var(--gc-ambient-brightness));
+  opacity: 0;
+  transform: scale(1.15);
+  transition: opacity 1.4s ease;
+  will-change: opacity;
+}
+.gc-ambient-img.gc-visible { opacity: 1; }
+.gc-ambient-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5, 8, 7, 0.15) 0%, rgba(5, 8, 7, 0.55) 100%);
+}
+
+/* ---------- Torna a base transparente ---------- */
+body,
+.Root,
+.Root__top-container,
+.Root__main-view,
+.main-view-container__scroll-node-child,
+.main-home-content,
+.main-topBar-background {
+  background: transparent !important;
+}
+.Root__top-container {
+  position: relative;
+  z-index: 1;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* ---------- Painéis de vidro ---------- */
+.Root__nav-bar,
+.main-yourLibraryX-libraryContainer,
+.Root__main-view,
+.Root__right-sidebar,
+.main-nowPlayingBar-nowPlayingBar,
+.Root__now-playing-bar > footer,
+.main-view-container {
+  background: var(--gc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--gc-blur)) saturate(var(--gc-saturate));
+  backdrop-filter: blur(var(--gc-blur)) saturate(var(--gc-saturate));
+  border: 1px solid var(--gc-border);
+  border-radius: var(--gc-radius);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 0 40px rgba(255, 255, 255, 0.015),
+    0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* Evita vidro duplicado (main-view-container dentro de main-view) */
+.Root__main-view { border: none; box-shadow: none; background: transparent !important; backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+/* ---------- Barra lateral e biblioteca ---------- */
+.Root__nav-bar { padding: 6px; }
+.main-yourLibraryX-libraryContainer { overflow: hidden; }
+
+.main-yourLibraryX-libraryItemContainer,
+.main-yourLibraryX-listItem,
+.main-navBar-navBarLink,
+.main-rootlist-rootlistItem {
+  border-radius: 12px;
+  transition: background 0.25s var(--gc-ease), transform 0.25s var(--gc-ease);
+}
+.main-yourLibraryX-libraryItemContainer:hover,
+.main-yourLibraryX-listItem:hover,
+.main-navBar-navBarLink:hover {
+  background: var(--gc-glass-hover) !important;
+  transform: translateX(3px);
+}
+.main-navBar-navBarLinkActive,
+.main-yourLibraryX-isActive {
+  background: var(--gc-accent-soft) !important;
+  box-shadow: inset 3px 0 0 var(--gc-accent);
+}
+.main-navBar-navBarLinkActive,
+.main-navBar-navBarLinkActive span { color: var(--gc-accent) !important; }
+
+.main-yourLibraryX-libraryItemContainer img,
+.main-yourLibraryX-listItem img {
+  border-radius: 10px;
+  transition: transform 0.3s var(--gc-ease);
+}
+.main-yourLibraryX-libraryItemContainer:hover img { transform: scale(1.06); }
+
+/* ---------- Topo ---------- */
+.main-topBar-container {
+  background: rgba(5, 8, 7, 0.35) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  backdrop-filter: blur(30px) saturate(180%);
+  border-radius: var(--gc-radius) var(--gc-radius) 0 0;
+}
+.main-topBar-searchBar,
+.x-searchInput-searchInputInput,
+input[data-testid="search-input"] {
+  background: var(--gc-glass-strong) !important;
+  border: 1px solid var(--gc-border) !important;
+  border-radius: 999px !important;
+  transition: box-shadow 0.3s var(--gc-ease), border-color 0.3s;
+}
+.x-searchInput-searchInputInput:focus,
+input[data-testid="search-input"]:focus {
+  border-color: var(--gc-accent) !important;
+  box-shadow: 0 0 0 3px var(--gc-accent-soft), 0 0 24px var(--gc-accent-glow);
+}
+
+/* ---------- Capas de álbuns e playlists (cards) ---------- */
+.main-card-card,
+.main-gridContainer-gridContainer > div > div {
+  background: var(--gc-glass) !important;
+  border: 1px solid var(--gc-border);
+  border-radius: var(--gc-radius);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  transition: transform 0.4s var(--gc-ease), box-shadow 0.4s var(--gc-ease), background 0.3s;
+  animation: gc-fade-up 0.6s var(--gc-ease) both;
+}
+.main-card-card:hover {
+  background: var(--gc-glass-hover) !important;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px var(--gc-accent-soft);
+}
+.main-card-imageContainer img,
+.main-card-cardImage,
+.main-cardImage-image {
+  border-radius: 14px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: transform 0.5s var(--gc-ease);
+}
+.main-card-card:hover .main-card-imageContainer img { transform: scale(1.04); }
+
+/* Botão play dos cards */
+.main-playButton-PlayButton,
+[data-testid="play-button"] {
+  background: var(--gc-accent) !important;
+  color: #04120a !important;
+  box-shadow: 0 8px 24px var(--gc-accent-glow);
+  transition: transform 0.25s var(--gc-ease), box-shadow 0.25s;
+}
+.main-playButton-PlayButton:hover,
+[data-testid="play-button"]:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 34px var(--gc-accent-glow);
+}
+
+/* ---------- Cabeçalho de playlist / álbum / artista ---------- */
+.main-entityHeader-container,
+.main-entityHeader-background,
+.main-actionBar-ActionBar,
+.main-actionBarBackground-background {
+  background: transparent !important;
+}
+.main-entityHeader-image,
+.main-entityHeader-imageContainer img,
+[data-testid="entity-image"] {
+  border-radius: 20px !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65), 0 0 60px var(--gc-accent-soft);
+}
+.main-entityHeader-title h1,
+.main-entityHeader-title span {
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Lista de faixas ---------- */
+.main-trackList-trackListRow {
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+.main-trackList-trackListRow:hover { background: var(--gc-glass-hover) !important; }
+.main-trackList-selected { background: var(--gc-accent-soft) !important; }
+.main-trackList-trackListHeaderRow {
+  background: rgba(5, 8, 7, 0.4) !important;
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  border-bottom: 1px solid var(--gc-border);
+}
+.main-trackList-playingIcon,
+.main-trackList-rowPlayPauseButton { color: var(--gc-accent) !important; }
+
+/* ---------- Barra inferior do player ---------- */
+.Root__now-playing-bar { padding: 0 10px 10px; }
+.Root__now-playing-bar > footer,
+.main-nowPlayingBar-nowPlayingBar {
+  background: var(--gc-glass-strong) !important;
+  border-radius: 22px;
+}
+.main-nowPlayingBar-container { background: transparent !important; }
+
+.main-nowPlayingWidget-nowPlaying img,
+.main-coverSlotCollapsed-container img {
+  border-radius: 12px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6);
+  transition: transform 0.4s var(--gc-ease), box-shadow 0.4s;
+}
+body.gc-playing .main-nowPlayingWidget-nowPlaying img {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 28px var(--gc-accent-glow);
+  animation: gc-breathe 3.2s ease-in-out infinite;
+}
+
+/* Botão play/pause central */
+.player-controls__buttons button[data-testid="control-button-playpause"],
+.main-playPauseButton-button {
+  background: var(--gc-accent) !important;
+  color: #04120a !important;
+  box-shadow: 0 6px 22px var(--gc-accent-glow);
+  transition: transform 0.25s var(--gc-ease), box-shadow 0.25s;
+}
+.player-controls__buttons button[data-testid="control-button-playpause"]:hover {
+  transform: scale(1.12);
+}
+.player-controls__buttons button:hover { color: #fff !important; }
+.control-button--active,
+.control-button--active:hover,
+.main-shuffleButton-button.main-shuffleButton-enabled,
+.main-repeatButton-button.main-repeatButton-enabled { color: var(--gc-accent) !important; }
+
+/* Barras de progresso e volume */
+.playback-progressbar .x-progressBar-progressBarBg,
+.progress-bar,
+.x-progressBar-progressBarBg {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-radius: 999px;
+}
+.x-progressBar-fillColor,
+.progress-bar__fg {
+  background: linear-gradient(90deg, #1ed760, #6dffaa) !important;
+  box-shadow: 0 0 12px var(--gc-accent-glow);
+  border-radius: 999px;
+}
+.x-progressBar-sliderArea:hover .x-progressBar-fillColor { background: var(--gc-accent) !important; }
+.progress-bar__slider { background: #fff !important; box-shadow: 0 0 10px var(--gc-accent-glow); }
+
+/* ---------- Letras (lyrics) ---------- */
+.lyrics-lyrics-container,
+.lyrics-lyrics-background,
+.main-lyricsPage-container {
+  background: transparent !important;
+}
+.lyrics-lyrics-contentWrapper {
+  padding-block: 30vh;
+}
+.lyrics-lyrics-contentContainer { text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); }
+.lyrics-lyricsContent-lyric,
+.lyrics-lyricsContent-element {
+  color: rgba(255, 255, 255, 0.38) !important;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  filter: blur(1.2px);
+  transform-origin: left center;
+  transition: color 0.5s var(--gc-ease), transform 0.5s var(--gc-ease), filter 0.5s var(--gc-ease), text-shadow 0.5s;
+}
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-highlight,
+.lyrics-lyricsContent-highlight {
+  color: rgba(255, 255, 255, 0.7) !important;
+  filter: blur(0.4px);
+}
+.lyrics-lyricsContent-lyric.lyrics-lyricsContent-active,
+.lyrics-lyricsContent-active {
+  color: #ffffff !important;
+  filter: blur(0);
+  transform: scale(1.06);
+  text-shadow: 0 0 30px var(--gc-accent-glow), 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+.lyrics-lyricsContent-lyric:hover { filter: blur(0); color: var(--gc-accent) !important; }
+
+/* ---------- Menus, popovers e modais ---------- */
+.main-contextMenu-menu,
+[data-tippy-root] .tippy-box,
+.GenericModal__overlay .main-embedWidgetGenerator-container,
+.GenericModal > div,
+.main-popupModal-container,
+.encore-dark-theme [role="menu"] {
+  background: rgba(10, 18, 14, 0.72) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(190%);
+  backdrop-filter: blur(40px) saturate(190%);
+  border: 1px solid var(--gc-border);
+  border-radius: 16px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+}
+.main-contextMenu-menuItemButton { border-radius: 8px; transition: background 0.2s; }
+.main-contextMenu-menuItemButton:hover { background: var(--gc-accent-soft) !important; }
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--gc-accent); background-clip: padding-box; }
+
+/* ---------- Textos e seleção ---------- */
+::selection { background: var(--gc-accent); color: #04120a; }
+a:hover { color: var(--gc-accent); }
+
+/* ---------- Animações ---------- */
+@keyframes gc-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes gc-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.035); }
+}
+.main-view-container__scroll-node-child > section,
+.main-home-content > section {
+  animation: gc-fade-up 0.55s var(--gc-ease) both;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01s !important; }
+}
+
+/* GC-FIX-START */
+/* Glass Clean - correcao das camadas opacas (layout global-nav do Spotify) */
+
+/* 1) Remove o fundo opaco dos conteineres do layout (miramos por estrutura, nao por classe aleatoria) */
+.Root__top-container > *,
+.Root__top-container *:has(.main-view-container),
+.Root__top-container *:has(.main-nowPlayingBar-container),
+.Root__top-container *:has(.main-yourLibraryX-libraryRootlist),
+.Root__top-container *:has(.canvasVideoContainerNPV),
+.Root__top-container *:has([data-testid="NPV_Panel_OpenDiv"]) {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* 2) Vidro nos paineis laterais (biblioteca e painel direito) */
+.Root__top-container > *:has(.main-yourLibraryX-libraryRootlist),
+.Root__top-container > *:has(.canvasVideoContainerNPV),
+.Root__top-container > *:has([data-testid="NPV_Panel_OpenDiv"]) {
+  background: var(--gc-glass) !important;
+  -webkit-backdrop-filter: blur(var(--gc-blur)) saturate(var(--gc-saturate));
+  backdrop-filter: blur(var(--gc-blur)) saturate(var(--gc-saturate));
+  border: 1px solid var(--gc-border);
+  border-radius: var(--gc-radius);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 18px 50px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+/* 3) Cabecalho da biblioteca sem fundo proprio */
+.main-yourLibraryX-libraryRootlist,
+.main-yourLibraryX-libraryRootlist > * {
+  background: transparent !important;
+}

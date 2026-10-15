@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Glass Clean",
+    "description": "Ambient glassmorphism theme with Spotify green accent. Album-cover ambient background, frosted panels, lyrics glow, and smooth animations. Works with Spicetify v2.45+.",
+    "preview": "preview.png",
+    "readme": "README.md",
+    "usercss": "user.css",
+    "schemes": "color.ini",
+    "include": [
+      "https://raw.githubusercontent.com/VGcoderBr/Glass/main/theme.js"
+    ],
+    "authors": [
+      {
+        "name": "VGcoderBr",
+        "url": "https://github.com/VGcoderBr"
+      }
+    ],
+    "tags": ["glass", "glassmorphism", "dark", "green", "ambient", "blur"]
+  }
+]
